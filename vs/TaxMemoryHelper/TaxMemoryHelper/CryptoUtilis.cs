@@ -14,6 +14,7 @@ using Org.BouncyCastle.Security;
 using System.Security.Cryptography;
 using System.IO;
 using System.Runtime.InteropServices;
+using Org.BouncyCastle.Crypto.Paddings;
 
 namespace TaxMemoryHelper
 {
@@ -130,6 +131,89 @@ namespace TaxMemoryHelper
             }
 
             return sb.Remove(sb.Length - 1, 1).ToString();
+        }
+
+        public static string SignData(string stringToBeSigned, string privateKey)
+        {
+            // add header and footer
+            var pem = "-----BEGIN PRIVATE KEY-----\n" + privateKey + "\n-----END PRIVATE KEY-----";
+
+            PemReader pr = new PemReader(new StringReader(pem));
+            AsymmetricKeyParameter privateKeyParams = (AsymmetricKeyParameter)pr.ReadObject();
+            RSAParameters rsaParams = DotNetUtilities.ToRSAParameters(
+                (RsaPrivateCrtKeyParameters)privateKeyParams);
+
+            RSACryptoServiceProvider csp = new RSACryptoServiceProvider();
+            csp.ImportParameters((RSAParameters)rsaParams);
+
+            var dataBytes = Encoding.UTF8.GetBytes(stringToBeSigned);
+            return Convert.ToBase64String(csp.SignData(
+                dataBytes, HashAlgorithmName.SHA256,
+                RSASignaturePadding.Pkcs1));
+        }
+
+        public static string AesEncrypt(byte[] payload, byte[] key, byte[] iv)
+        {
+            var cipher = new GcmBlockCipher(new AesEngine());
+
+            byte[] baPayload = new byte[0];
+
+            cipher.Init(true, new AeadParameters(new KeyParameter(key), 128, iv, baPayload));
+
+            var cipherBytes = new byte[cipher.GetOutputSize(payload.Length)];
+
+            int len = cipher.ProcessBytes(payload, 0, payload.Length, cipherBytes, 0);
+
+            cipher.DoFinal(cipherBytes, len);
+
+            return Convert.ToBase64String(cipherBytes);
+        }
+
+        public static byte[] Xor(byte[] left, byte[] right)
+        {
+            byte[] val = new byte[left.Length];
+            for (int i = 0; i < left.Length; i++)
+            {
+                val[i] = (byte)(left[i] ^ right[i]);
+            }
+           
+            return val;
+        }
+
+        public static String EncryptData(string stringToBeEncrypted, string publicKey)
+        {
+            try
+            {
+                AsymmetricKeyParameter asymmetricKeyParameter =
+                    PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKey));
+                
+                RsaKeyParameters rsaKeyParameters = (RsaKeyParameters)asymmetricKeyParameter;
+
+                RSAParameters rsaParameters = new RSAParameters();
+
+                rsaParameters.Modulus = rsaKeyParameters.Modulus.ToByteArrayUnsigned();
+                rsaParameters.Exponent = rsaKeyParameters.Exponent.ToByteArrayUnsigned();
+
+                RSACng rsa = new RSACng();
+                rsa.ImportParameters(rsaParameters);
+
+                string base64 = Convert.ToBase64String(
+                    rsa.Encrypt(Encoding.UTF8.GetBytes(stringToBeEncrypted),
+                    RSAEncryptionPadding.OaepSHA256));
+
+                if(base64.Length %4 ==3)
+                {
+                    base64 += "=";
+                }else if(base64.Length %4 == 2)
+                {
+                    base64 += "==";
+                }
+                return base64;
+            }
+            catch (Exception ex)
+            {
+                return "error";
+            }
         }
 
         private static string getKey(string rootKey, string myKey)
