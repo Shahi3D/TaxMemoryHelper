@@ -22,6 +22,8 @@ jobs:
         dotnet-version: 6.0.x
     - name: where are we
       run: pwd
+    - name: change directory
+      run: dir
     - name: Restore dependencies ./vs/TaxMemoryHelper
       run: dotnet restore
     - name: Build
