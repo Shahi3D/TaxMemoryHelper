@@ -26,9 +26,9 @@ jobs:
       run: cd vs
     - name: where are we 2
       run: pwd
- #   - name: Restore dependencies ./vs/TaxMemoryHelper
- #     run: dotnet restore
- #   - name: Build
- #     run: dotnet build --no-restore ./vs/TaxMemoryHelper
- #   - name: Test
- #     run: dotnet test --no-build --verbosity normal ./vs/TaxMemoryHelper
+    - name: Restore dependencies 
+      run: dotnet restore ./vs/TaxMemoryHelper
+    - name: Build
+      run: dotnet build --no-restore ./vs/TaxMemoryHelper
+#    - name: Test
+#      run: dotnet test --no-build --verbosity normal ./vs/TaxMemoryHelper
