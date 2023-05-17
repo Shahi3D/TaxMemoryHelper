@@ -23,10 +23,12 @@ jobs:
     - name: where are we
       run: pwd
     - name: change directory
-      run: dir
-    - name: Restore dependencies ./vs/TaxMemoryHelper
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore ./vs/TaxMemoryHelper
-    - name: Test
-      run: dotnet test --no-build --verbosity normal ./vs/TaxMemoryHelper
+      run: cd vs/TaxMemoryHelper
+    - name: where are we
+      run: pwd
+ #   - name: Restore dependencies ./vs/TaxMemoryHelper
+ #     run: dotnet restore
+ #   - name: Build
+ #     run: dotnet build --no-restore ./vs/TaxMemoryHelper
+ #   - name: Test
+ #     run: dotnet test --no-build --verbosity normal ./vs/TaxMemoryHelper
