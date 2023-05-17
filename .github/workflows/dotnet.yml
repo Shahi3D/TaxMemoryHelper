@@ -23,7 +23,7 @@ jobs:
     - name: where are we
       run: pwd
     - name: change directory
-      run: cd ./vs/TaxMemoryHelper
+      run: cd vs
     - name: where are we 2
       run: pwd
  #   - name: Restore dependencies ./vs/TaxMemoryHelper
