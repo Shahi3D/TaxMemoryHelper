@@ -22,9 +22,9 @@ jobs:
         dotnet-version: 6.0.x
     - name: where are we
       run: pwd
-    - name: Restore dependencies
+    - name: Restore dependencies ./vs/TaxMemoryHelper
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore ./vs/TaxMemoryHelper
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal ./vs/TaxMemoryHelper
