@@ -1,6 +1,6 @@
 namespace TaxMemoryHelper.Tests.Unit
 {
-    public class UnitTest1
+    public class CryptoUtilisTests
     {
         [Fact]
         public void Test1()
