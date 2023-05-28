@@ -29,4 +29,10 @@
     <ProjectReference Include="..\TaxMemoryHelper\TaxMemoryHelper.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ExampleJson.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
