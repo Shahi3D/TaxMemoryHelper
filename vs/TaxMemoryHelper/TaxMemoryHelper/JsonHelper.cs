@@ -1,4 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿/////////////////////////////////////////////////////////////////
+/// This code is not mine and it's from the document provided by
+/// Iranian National Tax Administration. You can find the codes 
+/// in RC_TICS.IS_V1.1 pdf file.
+/////////////////////////////////////////////////////////////////
+
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace TaxMemoryHelper
